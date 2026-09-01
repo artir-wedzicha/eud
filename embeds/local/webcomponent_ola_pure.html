@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+      window.EUD_SCRIPT_URL = './../cdn/tl-eud-dashboard.js';
+    </script>
+</head>
+<body class="eud-page-body">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/11.1.0/jsrsasign-all-min.js"></script>
+<script src="./../cdn/eud-wrapper.js"></script>
+
+<script type="text/javascript">
+const secret = "f76d017af9eb4553b0ca14ccd2876432";
+
+const header = { alg: "HS256", typ: "JWT" };
+
+const payload = {
+  sub: "691465cca4f205b86b92e6fd",
+  member_id: "aleksandra.ozdoba+150701@trueloyal.com",
+  email_address: "aleksandra.ozdoba+150701@trueloyal.com",
+  first_name: "ola",
+  last_name: "test",
+  member_status: "active",
+  exp: Math.floor(Date.now() / 1000) + 1800
+};
+
+const sHeader = JSON.stringify(header);
+const sPayload = JSON.stringify(payload);
+
+const jwt_token = KJUR.jws.JWS.sign("HS256", sHeader, sPayload, { utf8: secret });
+
+console.log("JWT:", jwt_token);
+
+// Create and append the webcomponent with the generated token
+const dashboard = document.createElement('tl-eud-dashboard');
+dashboard.setAttribute('access-token', jwt_token);
+dashboard.setAttribute('id', 'eud-dashboard');
+dashboard.setAttribute('team-partner-id', 'a9b373c887');
+dashboard.style.width = '100%';
+dashboard.style.height = '100vh';
+dashboard.style.display = 'block';
+document.body.appendChild(dashboard);
+</script>
+
+</body>
+</html>
