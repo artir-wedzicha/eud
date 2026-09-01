@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>EUD Production Test - QA Account</title>
+    <link rel="stylesheet" href="../../styles.css">
+
+    <script>
+      window.EUD_SCRIPT_URL = './../cdn/tl-eud-dashboard.js';
+    </script>
+
+</head>
+<body class="eud-page-body">
+<header class="eud-page-header">
+    <div class="eud-page-header-container">
+        <a href="/" class="eud-page-logo-link">
+            <img src="https://cdn.prod.website-files.com/699727cab4fdc7be0c710882/6998471017ae8da96d921632_501ee60c4c1aaf1ae38225dd1e503cd1_Logo.svg"
+                 alt="TrueLoyal Logo" class="eud-page-logo">
+        </a>
+        <div class="eud-page-header-actions">
+            <a href="../../index.html" class="eud-page-back-button">← Back</a>
+            <!-- Miejsce na dodatkowe przyciski/akcje -->
+        </div>
+    </div>
+</header>
+
+
+<div class="eud-page-code-container">
+    <pre class="eud-page-code-block"><code>&lt;script src="https://cdn.hypemarks.com/assets/eud-wrapper.js"&gt;&lt;/script&gt;
+&lt;tl-eud-dashboard
+access-token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW1iZXJfaWQiOiJhcnR1ci53ZWR6aWNoYUB0cnVlbG95YWwuY29tIiwic3ViIjoiNjkxNDY1Y2NhNGYyMDViODZiOTJlNmZkIiwiZXhwIjoxODMwMjk3NjAwfQ.9vU6burlSdhjCQn1-nEoHZduyhXZUkYncnJYSWfvcBE"
+        id="eud-dashboard"
+        team-partner-id="a9b373c887"
+        version="v2"
+        language="english"
+        style="width: 100%; height: 100vh; display: block;"
+&gt;&lt;/tl-eud-dashboard&gt;</code></pre>
+</div>
+
+
+<script src="./../cdn/eud-wrapper.js"></script>
+
+<tl-eud-dashboard
+        access-token="wrong_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW1iZXJfaWQiOiJhcnR1ci53ZWR6aWNoYUB0cnVlbG95YWwuY29tIiwic3ViIjoiNjkxNDY1Y2NhNGYyMDViODZiOTJlNmZkIiwiZXhwIjoxODMwMjk3NjAwfQ.9vU6burlSdhjCQn1-nEoHZduyhXZUkYncnJYSWfvcBE"
+        id="eud-dashboard"
+        team-partner-id="a9b373c887"
+        version="v2"
+        language="english"
+        style="width: 100%; height: 100vh; display: block;">
+</tl-eud-dashboard>
+</body>
+</html>

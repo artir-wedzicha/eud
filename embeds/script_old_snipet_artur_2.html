@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trueloyal Embed Test</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    #trueloyal-dashboard {
+      width: 800px;
+      height: 850px;
+      margin: 0 auto;
+      border: 1px dashed #ccc; /* just so you can see the container */
+    }
+    @media (max-width: 768px) {
+      #trueloyal-dashboard { width: 370px; height: 625px; }
+    }
+  </style>
+</head>
+<body>
+  <h1>My Test Page</h1>
+
+  <!-- Paste the exact container snippet from Trueloyal here -->
+  <div id="trueloyal-dashboard"></div>
+  <script src="./all.js" type="text/javascript"></script>
+
+<div id= 'zrl_embed_div' style= "margin-right:-6px; width:1000px; height: 850px;"> </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+<script type="text/javascript">
+function jsUcfirst(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+
+function Base64EncodeUrl(str){
+    return str.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
+}
+
+function generate_jwt_token(payload, api_key) {
+    const HMACSHA256 = (stringToSign, secret) => {
+        var hash = CryptoJS.HmacSHA256(stringToSign, secret);
+        console.log(hash)
+        // return hash.toString()
+        var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+        return hashInBase64
+    }
+
+    // The header typically consists of two parts:
+    // the type of the token, which is JWT, and the signing algorithm being used,
+    // such as HMAC SHA256 or RSA.
+    const header = {
+      "alg": "HS256",
+      "typ": "JWT",
+      // "kid": "vpaas-magic-cookie-1fc542a3e4414a44b2611668195e2bfe/4f4910"
+    }
+    let encodedHeaders = btoa(JSON.stringify(header))
+    encodedHeaders = Base64EncodeUrl(encodedHeaders)
+
+    // The second part of the token is the payload, which contains the claims.
+    // Claims are statements about an entity (typically, the user) and
+    // additional data. There are three types of claims:
+    // registered, public, and private claims.
+    // let encodedPlayload = btoa(JSON.stringify(payload))
+    let encodedPlayload = b64EncodeUnicode(JSON.stringify(payload))
+    // let encodedPlayload = toBinary(JSON.stringify(payload))
+
+    encodedPlayload = Base64EncodeUrl(encodedPlayload)
+    // create the signature part you have to take the encoded header,
+    // the encoded payload, a secret, the algorithm specified in the header,
+    // and sign that.
+    const signature = HMACSHA256(`${encodedHeaders}.${encodedPlayload}`, api_key)
+    console.log(signature)
+    // const encodedSignature = btoa(signature)
+    encodedSignature = Base64EncodeUrl(signature)
+    const jwt = `${encodedHeaders}.${encodedPlayload}.${encodedSignature}`
+    return jwt
+}
+
+function b64EncodeUnicode(str) {
+    // first we use encodeURIComponent to get percent-encoded UTF-8,
+    // then we convert the percent encodings into raw bytes which
+    // can be fed into btoa.
+    // return btoa(encodeURIComponent(str));
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+        function toSolidBytes(match, p1) {
+            return String.fromCharCode('0x' + p1);
+    }));
+}
+
+function toBinary(string) {
+  const codeUnits = new Uint16Array(string.length);
+  for (let i = 0; i < codeUnits.length; i++) {
+    codeUnits[i] = string.charCodeAt(i);
+  }
+  return btoa(String.fromCharCode(...new Uint8Array(codeUnits.buffer)));
+}
+</script>
+ <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+
+<script type="text/javascript">
+    window._zrl  =  window._zrl || [];
+    var user_counter = "68"
+
+
+
+    let api_key = "f76d017af9eb4553b0ca14ccd2876432" // karola prod
+    let partner_id = "a9b373c887" // karola prod
+
+
+    user_info = {
+
+        "member_id": "artur.wedzicha@trueloyal.com", //karola prod
+        "sub":"691465cca4f205b86b92e6fd", // karola prod
+
+
+
+        "exp": Math.floor(new Date().getTime() / 1000) + 600,
+
+        // "email_subscription_status": "unsubscribed",
+        // "address": {
+        //     "line1": "Updates",
+        //     "line2": "Updates",
+        //     "city": "Updates",
+        //     "state": "Updates",
+        //     "country": "Updates",
+        //     "postal_code": "Updates"
+        // },
+        "custom_attributes": {
+            // "cust_member_string": "TEST3",
+            // "cust_number": 105,
+            // "cust_date": "09/26/2022",
+            // "alloweds_values": ["max"],
+            // "list_type cu attr": ["TEST6", "TEST10"]            
+        },
+    };
+    let jwt_token = generate_jwt_token(user_info, api_key)
+    init_data = {
+        "partner_id": "a9b373c887", // bc prod
+        "isDev": true,
+        "jwt_token": jwt_token,
+        "version": "v2",
+        "server": "https://app.zinrelo.com",
+    }
+    _zrl.push( [ 'init' , init_data] );
+    console.log(init_data)
+</script>
+ 
+
+
+
+
+
+</body>
+</html>

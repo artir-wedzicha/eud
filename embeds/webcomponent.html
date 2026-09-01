@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>EUD Webcomponent - TrueLoyal</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="eud-page-body">
+  <!-- Template załaduje się automatycznie -->
+
+  <h1 class="eud-page-h1">EUD Webcomponent</h1>
+
+  <div class="eud-page-code-container">
+    <pre class="eud-page-code-block"><code>&lt;script src="https://cdn.hypemarks.com/assets/eud-wrapper.js"&gt;&lt;/script&gt;
+&lt;tl-eud-dashboard
+  access-token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW1iZXJfaWQiOiJhcnR1ci53ZWR6aWNoYUB0cnVlbG95YWwuY29tIiwic3ViIjoiNjkxNDY1Y2NhNGYyMDViODZiOTJlNmZkIiwiZXhwIjoxODMwMjk3NjAwfQ.9vU6burlSdhjCQn1-nEoHZduyhXZUkYncnJYSWfvcBE"
+  id="eud-dashboard"
+  team-partner-id="a9b373c887"
+  version="v2"
+  language="english"
+  style="width: 100%; height: 100vh; display: block;"
+&gt;&lt;/tl-eud-dashboard&gt;</code></pre>
+  </div>
+
+  <script>
+    window.EUD_FORCE_CDN = true;
+  </script>
+
+  <script src="https://cdn.hypemarks.com/assets/eud-wrapper.js"></script>
+
+  <tl-eud-dashboard
+    access-token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW1iZXJfaWQiOiJhcnR1ci53ZWR6aWNoYUB0cnVlbG95YWwuY29tIiwic3ViIjoiNjkxNDY1Y2NhNGYyMDViODZiOTJlNmZkIiwiZXhwIjoxODMwMjk3NjAwfQ.9vU6burlSdhjCQn1-nEoHZduyhXZUkYncnJYSWfvcBE"
+    id="eud-dashboard"
+    team-partner-id="a9b373c887"
+    version="v2"
+    language="english"
+    style="width: 100%; height: 100vh; display: block;">
+  </tl-eud-dashboard>
+
+  <!-- Załaduj template -->
+  <script src="../template.js"></script>
+
+  <!-- Dodaj przycisk Back -->
+  <script>
+    if (window.EUDTemplate) {
+      EUDTemplate.addHeaderAction(`
+        <a href="../index.html" class="eud-page-back-button">← Back</a>
+      `);
+    }
+  </script>
+</body>
+</html>

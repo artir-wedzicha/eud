@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Example Page - TrueLoyal</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="eud-page-body">
+  <!-- Template (header + sidebar) załaduje się automatycznie -->
+
+  <h1 class="eud-page-h1">Przykładowa Podstrona</h1>
+
+  <div class="eud-page-code-container">
+    <p>To jest przykładowa podstrona używająca template.js</p>
+    <p>Header i sidebar ładują się automatycznie!</p>
+  </div>
+
+  <div class="eud-page-code-container">
+    <h3>Jak to działa?</h3>
+    <ol>
+      <li>Dodaj <code>&lt;script src="../template.js"&gt;&lt;/script&gt;</code> na końcu body</li>
+      <li>Dodaj klasę <code>eud-page-body</code> do body</li>
+      <li>Pisz normalną treść strony</li>
+      <li>Header i sidebar dodadzą się automatycznie!</li>
+    </ol>
+  </div>
+
+  <!-- Załaduj template na końcu -->
+  <script src="../template.js"></script>
+
+  <!-- Opcjonalnie: dodaj przycisk Back do headera -->
+  <script>
+    // Dodaj przycisk "Back" do headera
+    if (window.EUDTemplate) {
+      EUDTemplate.addHeaderAction(`
+        <a href="../index.html" class="eud-page-back-button">← Back</a>
+      `);
+    }
+  </script>
+</body>
+</html>

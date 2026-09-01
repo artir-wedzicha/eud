@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Trueloyal Embed Test</title>
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="eud-page-body">
+
+<script src="./../all.js" type="text/javascript"></script>
+
+<header class="eud-page-header">
+    <div class="eud-page-header-container">
+        <a href="/" class="eud-page-logo-link">
+            <img src="https://cdn.prod.website-files.com/699727cab4fdc7be0c710882/6998471017ae8da96d921632_501ee60c4c1aaf1ae38225dd1e503cd1_Logo.svg"
+                 alt="TrueLoyal Logo" class="eud-page-logo">
+        </a>
+        <div class="eud-page-header-actions">
+            <a href="../../index.html" class="eud-page-back-button">← Back</a>
+            <!-- Miejsce na dodatkowe przyciski/akcje -->
+        </div>
+    </div>
+</header>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+<script type="text/javascript">
+  function jsUcfirst(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+
+  function Base64EncodeUrl(str) {
+    return str.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
+  }
+
+  function generate_jwt_token(payload, api_key) {
+    const HMACSHA256 = (stringToSign, secret) => {
+      var hash = CryptoJS.HmacSHA256(stringToSign, secret);
+      console.log(hash)
+      // return hash.toString()
+      var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+      return hashInBase64
+    }
+
+    // The header typically consists of two parts:
+    // the type of the token, which is JWT, and the signing algorithm being used,
+    // such as HMAC SHA256 or RSA.
+    const header = {
+      'alg': 'HS256',
+      'typ': 'JWT',
+      // "kid": "vpaas-magic-cookie-1fc542a3e4414a44b2611668195e2bfe/4f4910"
+    }
+    let encodedHeaders = btoa(JSON.stringify(header))
+    encodedHeaders = Base64EncodeUrl(encodedHeaders)
+
+    // The second part of the token is the payload, which contains the claims.
+    // Claims are statements about an entity (typically, the user) and
+    // additional data. There are three types of claims:
+    // registered, public, and private claims.
+    // let encodedPlayload = btoa(JSON.stringify(payload))
+    let encodedPlayload = b64EncodeUnicode(JSON.stringify(payload))
+    // let encodedPlayload = toBinary(JSON.stringify(payload))
+
+    encodedPlayload = Base64EncodeUrl(encodedPlayload)
+    // create the signature part you have to take the encoded header,
+    // the encoded payload, a secret, the algorithm specified in the header,
+    // and sign that.
+    const signature = HMACSHA256(`${encodedHeaders}.${encodedPlayload}`, api_key)
+    console.log(signature)
+    // const encodedSignature = btoa(signature)
+    encodedSignature = Base64EncodeUrl(signature)
+    const jwt = `${encodedHeaders}.${encodedPlayload}.${encodedSignature}`
+    return jwt
+  }
+
+  function b64EncodeUnicode(str) {
+    // first we use encodeURIComponent to get percent-encoded UTF-8,
+    // then we convert the percent encodings into raw bytes which
+    // can be fed into btoa.
+    // return btoa(encodeURIComponent(str));
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+      function toSolidBytes(match, p1) {
+        return String.fromCharCode('0x' + p1);
+      }));
+  }
+
+  function toBinary(string) {
+    const codeUnits = new Uint16Array(string.length);
+    for (let i = 0; i < codeUnits.length; i++) {
+      codeUnits[i] = string.charCodeAt(i);
+    }
+    return btoa(String.fromCharCode(...new Uint8Array(codeUnits.buffer)));
+  }
+</script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+
+<script type="text/javascript">
+  window._zrl = window._zrl || [];
+  var user_counter = '68'
+
+  let api_key = '1711d7fdc6d145d0a6639509ac1ccf44' // qa trueloyal prod
+  let partner_id = 'bba78acbc4' // qa trueloyal prod
+  user_info = {
+    'member_id': 'artur.wedzicha@trueloyal.com',
+    'sub': '6a9966c2d9848679c3f8431d',
+    'exp': Math.floor(new Date().getTime() / 1000) + 600,
+    'custom_attributes': {},
+  };
+  let jwt_token = generate_jwt_token(user_info, api_key)
+  init_data = {
+    'partner_id': partner_id,
+    'jwt_token': jwt_token,
+    'version': 'v2',
+    'server': 'https://app.zinrelo.com',
+  }
+  _zrl.push(['init', init_data]);
+  console.log(init_data, 'test')
+</script>
+
+</body>
+</html>
