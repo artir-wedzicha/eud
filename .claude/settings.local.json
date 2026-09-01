@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl:*)",
+      "Bash(grep:*)",
+      "Bash(node:*)",
+      "Bash(find:*)",
+      "Bash(ls iframe_to_webcomponent*.html)",
+      "Bash(for file in iframe_to_webcomponent_artur_2.html iframe_to_webcomponent_karola.html iframe_to_webcomponent_ola.html iframe_to_webcomponent_staging.html)",
+      "Bash(do)",
+      "Bash(if grep -q \"eud-page-code-container\" \"$file\")",
+      "Bash(then)",
+      "Bash(echo:*)",
+      "Bash(else)",
+      "Bash(fi)",
+      "Bash(done)"
+    ]
+  }
+}
