@@ -100,21 +100,26 @@
   window._zrl = window._zrl || [];
   var user_counter = '68'
 
-  let api_key = '1711d7fdc6d145d0a6639509ac1ccf44' // qa trueloyal prod
-  let partner_id = 'bba78acbc4' // qa trueloyal prod
+  let api_key = 'd943cc5c1e694337b06c95e13f68adf8'
+  let partner_id = 'f9d416961e'
   user_info = {
-    // "member_id": "artur.wedzicha@trueloyal.com", //qa trueloyal prod
-    "sub":"6a9966c2d9848679c3f8431d", // qa trueloyal prod
-    'exp': Math.floor(new Date().getTime() / 1000) + 600,
-    'custom_attributes': {},
+    "sub": "69b2a728256d6e0bae463d39",
+    // "member_id": "aleksandra.ozdoba+210901@trueloyal.com",
+    "email_address": "aleksandra.ozdoba+210901@trueloyal.com",
+    "first_name": "ola",
+    "last_name": "test",
+    "member_status": "active",
+    'exp': Math.floor(Date.now() / 1000) + 1800,
   };
 
   let jwt_token = generate_jwt_token(user_info, api_key)
+  console.log("JWT:", jwt_token)
   init_data = {
     'partner_id': partner_id,
+    "isDev": true,
     'jwt_token': jwt_token,
     'version': 'v2',
-    'server': 'https://app.staging.trueloyal.com',
+    'server': 'https://app.zinrelo.com',
   }
   _zrl.push(['init', init_data]);
   console.log(init_data, 'test')
