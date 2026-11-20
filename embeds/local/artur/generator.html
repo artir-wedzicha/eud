@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trueloyal Embed Generator</title>
     <link rel="stylesheet" href="../../../styles.css">
+
+    <script>
+      // isDev: load the wrapper and dashboard from the local cdn copy instead of advocacy.*.trueloyal.com
+      window.EUD_BUNDLE_URL = '../../cdn/eud-wrapper.js';
+      window.EUD_SCRIPT_URL = '../../cdn/tl-eud-dashboard.js';
+    </script>
 </head>
 
 <body class="eud-page-body">
