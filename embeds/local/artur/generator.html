@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trueloyal Embed Generator</title>
+    <link rel="stylesheet" href="../../../styles.css">
+</head>
+
+<body class="eud-page-body">
+
+<script src="../../cdn/all.js" type="text/javascript"></script>
+
+<header class="eud-page-header">
+    <div class="eud-page-header-container">
+        <a href="/" class="eud-page-logo-link">
+            <img src="https://cdn.prod.website-files.com/699727cab4fdc7be0c710882/6998471017ae8da96d921632_501ee60c4c1aaf1ae38225dd1e503cd1_Logo.svg"
+                 alt="TrueLoyal Logo" class="eud-page-logo">
+        </a>
+        <div class="eud-page-header-actions">
+            <a href="../../../index.html" class="eud-page-back-button">← Back</a>
+        </div>
+    </div>
+</header>
+
+<!-- GET form: params land in the URL, so a reload/shared link re-renders the same embed -->
+<form id="generator" style="max-width:1200px;margin:20px auto;display:grid;gap:8px">
+    <label>konto <select id="account"><option value="">— wybierz —</option></select></label>
+    <label>partner_id <input name="partner_id" value="77637bdf6f" required></label>
+    <label>api_key <input name="api_key" value="13fd33ee5bcc471fa1c8a6716f8080a6" required></label>
+    <label>server <input name="server" value="https://app.staging.trueloyal.com" required></label>
+    <label for="user_info">user_info (JSON, <code>exp</code> is added automatically)</label>
+    <textarea id="user_info" name="user_info" rows="6" class="eud-page-textarea">{
+  "member_id": "aleksandra.ozdoba+170705@trueloyal.com",
+  "sub": "6969f1076813f316f80ff5d5"
+}</textarea>
+    <button class="eud-page-button-primary">Generuj</button>
+</form>
+
+<pre class="eud-page-code-block" id="output" hidden style="max-width:1200px;margin:0 auto"></pre>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+<script type="text/javascript">
+  function Base64EncodeUrl(str) {
+    return str.replace(/\+/g, '-').replace(/\//g, '_').replace(/\=+$/, '');
+  }
+
+  function b64EncodeUnicode(str) {
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (m, p1) => String.fromCharCode('0x' + p1)));
+  }
+
+  function generate_jwt_token(payload, api_key) {
+    const header = Base64EncodeUrl(btoa(JSON.stringify({alg: 'HS256', typ: 'JWT'})));
+    const body = Base64EncodeUrl(b64EncodeUnicode(JSON.stringify(payload)));
+    const signature = Base64EncodeUrl(CryptoJS.enc.Base64.stringify(CryptoJS.HmacSHA256(`${header}.${body}`, api_key)));
+    return `${header}.${body}.${signature}`;
+  }
+
+  // accounts copied from the other embed HTML files
+  const STAGING = 'https://app.staging.trueloyal.com', PROD = 'https://app.zinrelo.com';
+  const ACCOUNTS = [
+    ['Ola – staging (77637bdf6f)', '77637bdf6f', '13fd33ee5bcc471fa1c8a6716f8080a6', STAGING, 'aleksandra.ozdoba+170705@trueloyal.com', '6969f1076813f316f80ff5d5'],
+    ['Artur – staging (08062ecd33)', '08062ecd33', '8bfc81f3a4964dfb8c8897d47500d3ae', STAGING, 'artur.wedzicha@trueloyal.com', '6ab0fc60de7afd8196bfe2d8'],
+    ['Artur – prod trueloyal (a9b373c887)', 'a9b373c887', 'f76d017af9eb4553b0ca14ccd2876432', PROD, 'artur.wedzicha@trueloyal.com', '691465cca4f205b86b92e6fd'],
+    ['Artur – prod store (bba78acbc4)', 'bba78acbc4', '1711d7fdc6d145d0a6639509ac1ccf44', PROD, 'artur.wedzicha@trueloyal.com', '6a9966c2d9848679c3f8431d'],
+    ['Karolina – prod (f9d416961e)', 'f9d416961e', 'd943cc5c1e694337b06c95e13f68adf8', PROD, 'karolina+streak_qa_t5@trueloyal.com', '69b2a728256d6e0bae463d39'],
+    ['Kacper – prod (c28d69a97f)', 'c28d69a97f', '3cf0dadd56db4bd9a44e591e71d480fa', PROD, 'kacper.skirlinski@trueloyal.com', '6a7d56b6fcf0747d97bf5337'],
+  ];
+
+  const form = document.getElementById('generator');
+  const account = document.getElementById('account');
+  ACCOUNTS.forEach(([label], i) => account.add(new Option(label, i)));
+  account.addEventListener('change', () => {
+    if (account.value === '') return;
+    const [, partner_id, api_key, server, member_id, sub] = ACCOUNTS[account.value];
+    form.elements.partner_id.value = partner_id;
+    form.elements.api_key.value = api_key;
+    form.elements.server.value = server;
+    form.elements.user_info.value = JSON.stringify({member_id, sub}, null, 2);
+  });
+
+  const params = new URLSearchParams(location.search);
+  // restore submitted values into the form
+  params.forEach((value, key) => form.elements[key] && (form.elements[key].value = value));
+
+  if (params.has('user_info')) {
+    const output = document.getElementById('output');
+    output.hidden = false;
+    try {
+      const user_info = {...JSON.parse(params.get('user_info')), exp: Math.floor(Date.now() / 1000) + 600};
+      const init_data = {
+        partner_id: params.get('partner_id'),
+        jwt_token: generate_jwt_token(user_info, params.get('api_key')),
+        version: 'v2',
+        server: params.get('server'),
+      };
+      output.textContent = `user_info = ${JSON.stringify(user_info, null, 2)}\n\ninit_data = ${JSON.stringify(init_data, null, 2)}`;
+      window._zrl = window._zrl || [];
+      _zrl.push(['init', init_data]);
+    } catch (e) {
+      output.textContent = `Invalid user_info JSON: ${e.message}`;
+    }
+  }
+</script>
+
+</body>
+</html>
