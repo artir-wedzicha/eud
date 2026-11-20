@@ -29,6 +29,7 @@
     <label>partner_id <input name="partner_id" value="77637bdf6f" required></label>
     <label>api_key <input name="api_key" value="13fd33ee5bcc471fa1c8a6716f8080a6" required></label>
     <label>server <input name="server" value="https://app.staging.trueloyal.com" required></label>
+    <label><input type="checkbox" name="isDev" value="true"> isDev</label>
     <label for="user_info">user_info (JSON, <code>exp</code> is added automatically)</label>
     <textarea id="user_info" name="user_info" rows="6" class="eud-page-textarea">{
   "member_id": "aleksandra.ozdoba+170705@trueloyal.com",
@@ -82,17 +83,23 @@
   const params = new URLSearchParams(location.search);
   // restore submitted values into the form
   params.forEach((value, key) => form.elements[key] && (form.elements[key].value = value));
+  form.elements.isDev.checked = params.has('isDev');
 
   if (params.has('user_info')) {
     const output = document.getElementById('output');
     output.hidden = false;
     try {
-      const user_info = {...JSON.parse(params.get('user_info')), exp: Math.floor(Date.now() / 1000) + 600};
+      const user_info = {
+        ...JSON.parse(params.get('user_info')),
+        ...(params.has('isDev') && {isDev: true}),
+        exp: Math.floor(Date.now() / 1000) + 600,
+      };
       const init_data = {
         partner_id: params.get('partner_id'),
         jwt_token: generate_jwt_token(user_info, params.get('api_key')),
         version: 'v2',
         server: params.get('server'),
+        isDev: params.has('isDev'),
       };
       output.textContent = `user_info = ${JSON.stringify(user_info, null, 2)}\n\ninit_data = ${JSON.stringify(init_data, null, 2)}`;
       window._zrl = window._zrl || [];
