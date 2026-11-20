@@ -119,11 +119,10 @@
   };
   let jwt_token = generate_jwt_token(user_info, api_key)
   init_data = {
-    "isDev": "true",
     "partner_id": "77637bdf6f", //  stage
+    "isDev": "true",
     "jwt_token": jwt_token,
     "version": "v2",
-    //"server": "https://app.zinrelo.com", //  prod
     "server": "https://app.staging.trueloyal.com", //  stage
   }
   _zrl.push( [ 'init' , init_data] );
