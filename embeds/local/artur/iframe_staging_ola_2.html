@@ -109,19 +109,19 @@
 
 
   user_info = {
-
-    //"member_id": "aleksandra.ozdoba+170705@trueloyal.com", // stage
-    "sub":"6969f1076813f316f80ff5d5", //  stage
-
-
-
-    "exp": Math.floor(new Date().getTime() / 1000) + 600,
+    "sub": "6969f1076813f316f80ff5d5", //  stage
+    "member_id": "aleksandra.ozdoba+2109_01@trueloyal.com",
+    "email_address": "aleksandra.ozdoba+2109_01@trueloyal.com",
+    "first_name": "Ola",
+    "last_name": "Test",
+    "member_status": "active",
+    "exp": Math.floor(Date.now() / 1000) + 1800,
   };
   let jwt_token = generate_jwt_token(user_info, api_key)
+  console.log("JWT:", jwt_token);
   init_data = {
-
-
-    "partner_id": "77637bdf6f", //  stage
+    "partner_id": partner_id, //  stage
+    "isDev": true,
     "jwt_token": jwt_token,
     "version": "v2",
     //"server": "https://app.zinrelo.com", //  prod
